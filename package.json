@@ -1,0 +1,12 @@
+{
+  "name": "koishi-plugin-teach",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "author": "Shigma <1700011071@pku.edu.cn>",
+  "license": "MIT",
+  "dependencies": {
+    "koishi-core": "^0.1.0",
+    "koishi-utils": "^0.1.0"
+  }
+}
