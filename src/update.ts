@@ -5,7 +5,7 @@ import { splitIds, processAnswer, TeachOptions } from './utils'
 export default async function (parsedOptions: TeachOptions) {
   const { ctx, meta, argc, options } = parsedOptions
   if (argc) return meta.$send('存在多余的参数，请检查指令语法或将含有空格或换行的问答置于一对引号内。')
-  if (!/^\d+(,\d+)*$/.exec(options.update)) return meta.$send(`参数 -u, --update 错误，请检查指令语法。`)
+  if (!/^\d+(,\d+)*$/.exec(options.update)) return meta.$send('参数 -u, --update 错误，请检查指令语法。')
   const ids: number[] = splitIds(options.update)
   const dialogues = await ctx.database.getDialogues(ids)
   const actualIds = dialogues.map(d => d.id)
@@ -18,8 +18,8 @@ export default async function (parsedOptions: TeachOptions) {
   if (options.delete) {
     const predicate: (dialogue: Dialogue) => boolean =
       meta.$user.authority > 3 ? () => false :
-      meta.$user.authority > 2 ? d => !!(d.flag & DialogueFlag.frozen) :
-      d => !!(d.flag & DialogueFlag.frozen) || d.writer !== meta.userId
+        meta.$user.authority > 2 ? d => !!(d.flag & DialogueFlag.frozen) :
+          d => !!(d.flag & DialogueFlag.frozen) || d.writer !== meta.userId
     const removable = dialogues.filter(d => !predicate(d)).map(d => d.id)
     const unremovable = dialogues.filter(predicate).map(d => d.id)
 
@@ -34,7 +34,7 @@ export default async function (parsedOptions: TeachOptions) {
     parsedOptions.groups = [meta.groupId]
   }
 
-  let hasUpdates = Object.keys(parsedOptions).length - 5
+  const hasUpdates = Object.keys(parsedOptions).length - 5
     || options.answer
     || options.question
     || options.frozen
@@ -42,8 +42,8 @@ export default async function (parsedOptions: TeachOptions) {
     || options.chance
 
   if (hasUpdates) {
-    let updateSet = new Set<number>()
-    let skipSet = new Set<number>()
+    const updateSet = new Set<number>()
+    const skipSet = new Set<number>()
 
     for (const dialogue of dialogues) {
       const updates = {} as Dialogue
@@ -54,6 +54,7 @@ export default async function (parsedOptions: TeachOptions) {
       }
 
       function updateValue <K extends keyof Dialogue> (key: K, type: 'string' | 'number', value: Dialogue[K]) {
+        // eslint-disable-next-line valid-typeof
         if (typeof value === type && value !== dialogue[key]) {
           updates[key] = value
         }
@@ -153,5 +154,4 @@ export default async function (parsedOptions: TeachOptions) {
     if (dialogue.flag & DialogueFlag.frozen) output.push('此问题已锁定')
     await meta.$send(output.join('\n'))
   }
-  return
 }

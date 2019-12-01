@@ -7,6 +7,7 @@ import teach from './teach'
 import update from './update'
 
 import './dialogue'
+import './extends'
 
 export function apply (ctx: GroupContext) {
   ctx.plugin(receiver)
@@ -15,29 +16,26 @@ export function apply (ctx: GroupContext) {
     .alias('教学')
     .shortcut('教学信息', { options: { info: true } })
     .shortcut('全局教学信息', { options: { info: true, allEnv: true } })
-    .config({
-      maxUsage: ({ authority: auth }) => auth < 3 ? 10 : auth < 4 ? 30 : Infinity
-    })
-    .option('-q, --question <question>', '搜索或修改已有问题', { notUsage: true, type: String })
-    .option('-a, --answer <answer>', '搜索或修改已有回答', { notUsage: true, type: String })
+    .option('-q, --question <question>', '搜索或修改已有问题', { notUsage: true, isString: true })
+    .option('-a, --answer <answer>', '搜索或修改已有回答', { notUsage: true, isString: true })
     .option('--all', '搜索全部问答')
     .option('-f, --frozen', '锁定这个问答', { authority: 4 })
-    .option('-F, --no-frozen', '解锁这个问答', { authority: 4, noNagated: true })
+    .option('-F, --no-frozen', '解锁这个问答', { authority: 4, noNegated: true })
     .option('-k, --keyword', '使用关键词匹配')
     .option('-c, --chance <value>', '设置问题的触发概率')
-    .option('-u, --update <id>', '查看或修改已有问题', { notUsage: true, type: String })
+    .option('-u, --update <id>', '查看或修改已有问题', { notUsage: true, isString: true })
     .option('-d, --disable', '在当前环境下禁用问题或回答')
     .option('-D, --delete', '彻底删除问题或回答')
-    .option('-e, --env <environment>', '设置问题的生效环境', { type: String })
+    .option('-e, --env <environment>', '设置问题的生效环境', { isString: true })
     .option('-E, --all-env', '搜索所有环境中的问答')
     .option('-g, --global-env', '设置全局生效环境，相当于 -e=*')
-    .option('-n, --no-env', '设置无生效环境，相当于 -e=""', { noNagated: true })
-    .option('-w, --writer <qq>', '添加或设置问题的作者', { type: Number })
+    .option('-n, --no-env', '设置无生效环境，相当于 -e=""', { noNegated: true })
+    .option('-w, --writer <qq>', '添加或设置问题的作者')
     .option('-W, --anonymous', '添加或设置匿名问题')
-    .option('-s, --add-successor <id>', '设置后继问题', { type: String })
-    .option('-S, --remove-successor <id>', '取消后继问题', { type: String })
-    .option('-p, --add-predecessor <id>', '设置前置问题', { type: String })
-    .option('-P, --remove-predecessor <id>', '取消前置问题', { type: String })
+    .option('-s, --add-successor <id>', '设置后继问题', { isString: true })
+    .option('-S, --remove-successor <id>', '取消后继问题', { isString: true })
+    .option('-p, --add-predecessor <id>', '设置前置问题', { isString: true })
+    .option('-P, --remove-predecessor <id>', '取消前置问题', { isString: true })
     .option('-i, --info', '查看教学信息', { notUsage: true })
     .usage('详细的使用方法请参考：https://shiki.shigma.xyz/manual/teach.html')
     .action(async (parsedArgv, question: string, answer: string) => {

@@ -1,5 +1,5 @@
 import { GroupContext, updateActivity } from 'koishi-core'
-import { randomPick, cqCode, sleep } from 'koishi-utils'
+import { randomPick, CQCode, sleep } from 'koishi-utils'
 import { simplifyQuestion, splitIds } from './utils'
 
 interface State {
@@ -44,13 +44,13 @@ export default function (ctx: GroupContext) {
     state.currentCount += 1
     const { interactiveness, name } = meta.$user
     updateActivity(interactiveness, groupId)
-    await meta.$user.update()
+    await meta.$user._update()
 
     const answers = dialogue.answer
       .replace(/\$\$/g, '@@__DOLLARS_PLACEHOLDER__@@')
       .replace(/\$a/g, `[CQ:at,qq=${meta.userId}]`)
-      .replace(/\$A/g, `[CQ:at,qq=all]`)
-      .replace(/\$m/g, cqCode('at', { qq: meta.selfId }))
+      .replace(/\$A/g, '[CQ:at,qq=all]')
+      .replace(/\$m/g, CQCode.stringify('at', { qq: meta.selfId }))
       .replace(/\$s/g, escapeAnswer(name === String(meta.userId) ? meta.sender.card || meta.sender.nickname : name))
       .replace(/\$0/g, escapeAnswer(meta.message))
       .split('$n')

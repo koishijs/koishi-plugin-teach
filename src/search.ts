@@ -17,13 +17,18 @@ export default async function (parsedOptions: TeachOptions) {
     groups = [meta.groupId]
   }
   const dialogues = await ctx.database.getDialogues({
-    writer, keyword, question, answer, envMode, groups,
+    writer,
+    keyword,
+    question,
+    answer,
+    envMode,
+    groups,
     frozen: options.unFrozen ? false : options.frozen,
   })
   if (!options.question && !options.answer) {
-    if (!dialogues.length) return meta.$send(`没有搜索到任何回答，尝试切换到其他环境。`)
+    if (!dialogues.length) return meta.$send('没有搜索到任何回答，尝试切换到其他环境。')
     const output = dialogues.map(({ id, question, answer }) => `${id}. 问题：“${question}”，回答：“${formatAnswer(answer)}”`)
-    output.unshift(`全部问答如下：`)
+    output.unshift('全部问答如下：')
     return meta.$send(output.join('\n'))
   }
   if (!options.keyword) {

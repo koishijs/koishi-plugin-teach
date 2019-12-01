@@ -7,11 +7,7 @@ export default async function apply (config: TeachOptions) {
       envMode = 1
       groups = [meta.groupId]
     }
-    const test = ctx.database.getDialogueTest({ envMode, groups })
-    const {
-      'COUNT(DISTINCT `question`)': questions,
-      'COUNT(*)': answers
-    } = await ctx.database.query('SELECT COUNT(DISTINCT `question`), COUNT(*) FROM `dialogues`' + test)
+    const { questions, answers } = await ctx.database.getDialogueCount({ envMode, groups })
     return meta.$send(`共收录了 ${questions} 个问题和 ${answers} 个回答。`)
   }
 }

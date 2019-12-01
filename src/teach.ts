@@ -21,12 +21,12 @@ export default async function (parsedOptions: TeachOptions, question: string, an
       envMode = 2
       groups = [meta.groupId]
     } else if (Math.abs(envMode) === 1) {
-      return meta.$send(`参数 -e, --env 错误，请检查指令语法。`)
+      return meta.$send('参数 -e, --env 错误，请检查指令语法。')
     }
     if (writer === undefined) {
       writer = meta.userId
     }
-    const { minAffinity, maxAffinity, chance: probability = 1 } = options
+    const { chance: probability = 1 } = options
     const successors = (parsedOptions.addSuccessor || []).join(',')
     const flag = Number(!!options.frozen) * DialogueFlag.frozen
       + Number(!!options.regexp) * DialogueFlag.regexp
