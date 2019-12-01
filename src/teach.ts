@@ -1,4 +1,4 @@
-import { DialogueFlag } from './dialogue'
+import { DialogueFlag } from './database'
 import { simplifyQuestion, simplifyAnswer, processAnswer, TeachOptions } from './utils'
 
 export default async function (parsedOptions: TeachOptions, question: string, answer: string) {

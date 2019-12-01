@@ -6,8 +6,8 @@ import search from './search'
 import teach from './teach'
 import update from './update'
 
-import './dialogue'
-import './extends'
+import './database'
+export * from './database'
 
 export function apply (ctx: GroupContext) {
   ctx.plugin(receiver)

@@ -1,5 +1,5 @@
 import { getUserName } from 'koishi-core'
-import { Dialogue, DialogueFlag } from './dialogue'
+import { Dialogue, DialogueFlag } from './database'
 import { splitIds, processAnswer, TeachOptions } from './utils'
 
 export default async function (parsedOptions: TeachOptions) {

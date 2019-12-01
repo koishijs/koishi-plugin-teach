@@ -1,8 +1,12 @@
-import { injectMethods } from 'koishi-core'
+import { injectMethods, extendUser, Activity } from 'koishi-core'
 import { escape } from 'mysql'
-
-// inject mysql typings
 import 'koishi-database-mysql'
+
+declare module 'koishi-core/dist/database' {
+  interface UserData {
+    interactiveness: Activity
+  }
+}
 
 declare module 'koishi-core/dist/database' {
   interface Database {
@@ -14,6 +18,8 @@ declare module 'koishi-core/dist/database' {
     getDialogueCount (test: DialogueTest): Promise<DialogueCount>
   }
 }
+
+extendUser(() => ({ interactiveness: {} }))
 
 export interface DialogueCount {
   questions: number
