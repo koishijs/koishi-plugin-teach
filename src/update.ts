@@ -1,6 +1,6 @@
 import { getUserName } from 'koishi-core'
 import { Dialogue, DialogueFlag } from './database'
-import { splitIds, processAnswer, TeachOptions } from './utils'
+import { splitIds, TeachOptions } from './utils'
 
 export default async function (parsedOptions: TeachOptions) {
   const { ctx, meta, argc, options } = parsedOptions
@@ -60,13 +60,10 @@ export default async function (parsedOptions: TeachOptions) {
         }
       }
 
+      updateValue('answer', 'string', options.answer)
       updateValue('question', 'string', options.question)
       updateValue('writer', 'number', parsedOptions.writer)
       updateValue('probability', 'number', options.chance)
-
-      if (typeof options.answer === 'string' && options.answer !== dialogue.answer) {
-        updates.answer = await processAnswer(options.answer, ctx.app.options.imageServerKey)
-      }
 
       let newFlag = dialogue.flag
       if (options.frozen) {
@@ -99,18 +96,6 @@ export default async function (parsedOptions: TeachOptions) {
           updates.groups = newGroups
         }
       }
-
-      if (parsedOptions.addSuccessor || parsedOptions.removeSuccessor) {
-        const { addSuccessor = [], removeSuccessor = [] } = parsedOptions
-        const oldSuccessors = splitIds(dialogue.successors)
-        const newSuccessors = Array
-          .from(new Set([...oldSuccessors, ...addSuccessor]))
-          .filter(id => !removeSuccessor.includes(id))
-          .sort().join(',')
-        if (newSuccessors !== dialogue.successors) updates.successors = newSuccessors
-      }
-
-      // TODO: predecessor
 
       if (Object.keys(updates).length) {
         try {

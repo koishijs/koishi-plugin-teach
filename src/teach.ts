@@ -1,5 +1,5 @@
 import { DialogueFlag } from './database'
-import { simplifyQuestion, simplifyAnswer, processAnswer, TeachOptions } from './utils'
+import { simplifyQuestion, simplifyAnswer, TeachOptions } from './utils'
 
 export default async function (parsedOptions: TeachOptions, question: string, answer: string) {
   const { argc, meta, ctx, options } = parsedOptions
@@ -9,8 +9,6 @@ export default async function (parsedOptions: TeachOptions, question: string, an
 
   if (!answer) return meta.$send('缺少问题或回答，请检查指令语法。')
   if (argc > 2) return meta.$send('存在多余的参数，请检查指令语法或将含有空格或换行的问答置于一对引号内。')
-
-  answer = await processAnswer(answer, ctx.app.options.imageServerKey)
 
   const [dialogue] = await ctx.database.getDialogues({ question, answer })
   if (dialogue) {

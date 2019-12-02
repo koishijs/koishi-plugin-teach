@@ -32,10 +32,6 @@ export function apply (ctx: GroupContext) {
     .option('-n, --no-env', '设置无生效环境，相当于 -e=""', { noNegated: true })
     .option('-w, --writer <qq>', '添加或设置问题的作者')
     .option('-W, --anonymous', '添加或设置匿名问题')
-    .option('-s, --add-successor <id>', '设置后继问题', { isString: true })
-    .option('-S, --remove-successor <id>', '取消后继问题', { isString: true })
-    .option('-p, --add-predecessor <id>', '设置前置问题', { isString: true })
-    .option('-P, --remove-predecessor <id>', '取消前置问题', { isString: true })
     .option('-i, --info', '查看教学信息', { notUsage: true })
     .usage('详细的使用方法请参考：https://shiki.shigma.xyz/manual/teach.html')
     .action(async (parsedArgv, question: string, answer: string) => {

@@ -43,10 +43,9 @@ export enum DialogueFlag {
   appellation = 4,
 }
 
-interface DialogueTest {
+export interface DialogueTest {
   envMode?: -2 | -1 | 0 | 1 | 2
   groups?: number[]
-  extraIds?: string[]
   question?: string
   answer?: string
   writer?: number
@@ -80,9 +79,6 @@ injectMethods('mysql', {
       envConditional = `\`groups\` LIKE "*%${test.groups.join(',%')}%" OR \`groups\` NOT LIKE "*%" AND ${test.groups.map(id => `\`groups\` NOT LIKE "%${id}%"`).join(' AND ')}`
     }
     if (envConditional) {
-      if ((test.extraIds || []).length) {
-        envConditional += ` OR \`id\` IN (${test.extraIds.join(',')})`
-      }
       conditionals.push(`(${envConditional})`)
     }
     if (test.frozen === true) {
