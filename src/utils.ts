@@ -45,12 +45,13 @@ export interface TeachOptions {
   envMode?: -2 | -1 | 0 | 1 | 2
 }
 
-export default function parseOptions (ctx: Context, parsedArgv: ParsedCommandLine) {
+export default async function parseOptions (ctx: Context, parsedArgv: ParsedCommandLine) {
   const { options, meta, args } = parsedArgv
   const argc = args.length
 
   if (typeof options.chance === 'number' && (options.chance <= 0 || options.chance > 1)) {
-    return meta.$send('参数 -c, --chance 应为不超过 1 的正数。')
+    await meta.$send('参数 -c, --chance 应为不超过 1 的正数。')
+    return
   }
 
   const parsedOptions: TeachOptions = { ctx, meta, argc, args, options }
@@ -61,7 +62,8 @@ export default function parseOptions (ctx: Context, parsedArgv: ParsedCommandLin
     if (isInteger(options.writer) && options.writer > 0) {
       parsedOptions.writer = options.writer
     } else {
-      return meta.$send('参数 -w, --writer 错误，请检查指令语法。')
+      await meta.$send('参数 -w, --writer 错误，请检查指令语法。')
+      return
     }
   }
 
@@ -79,11 +81,16 @@ export default function parseOptions (ctx: Context, parsedArgv: ParsedCommandLin
           : options.env.startsWith('~') ? -1
             : 2
     } else {
-      return meta.$send('参数 -e, --env 错误，请检查指令语法。')
+      await meta.$send('参数 -e, --env 错误，请检查指令语法。')
+      return
     }
   }
 
-  if (String(options.question).includes('[CQ:image,')) return meta.$send('问题不能包含图片。')
+  if (String(options.question).includes('[CQ:image,')) {
+    await meta.$send('问题不能包含图片。')
+    return
+  }
+
   options.question = simplifyQuestion(options.question)
   if (!options.question) delete options.question
   options.answer = simplifyAnswer(options.answer)

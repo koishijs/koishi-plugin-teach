@@ -25,7 +25,6 @@ export default async function (parsedOptions: TeachOptions, question: string, an
       writer = meta.userId
     }
     const { chance: probability = 1 } = options
-    const successors = (parsedOptions.addSuccessor || []).join(',')
     const flag = Number(!!options.frozen) * DialogueFlag.frozen
       + Number(!!options.regexp) * DialogueFlag.regexp
     const dialogue = await ctx.database.createDialogue({
@@ -34,7 +33,6 @@ export default async function (parsedOptions: TeachOptions, question: string, an
       answer,
       writer,
       flag,
-      successors,
       probability,
     })
     return meta.$send(`问答已添加，编号为 ${dialogue.id}。`)

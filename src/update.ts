@@ -1,4 +1,3 @@
-import { getUserName } from 'koishi-core'
 import { Dialogue, DialogueFlag } from './database'
 import { splitIds, TeachOptions } from './utils'
 
@@ -125,7 +124,7 @@ export default async function (parsedOptions: TeachOptions) {
     ]
     if (dialogue.writer) {
       const user = await ctx.database.getUser(dialogue.writer, 0, ['id', 'name'])
-      output.push(`来源：${getUserName(user)}`)
+      output.push(`来源：${user.name}`)
     }
     output.push(`生效环境：${dialogue.groups.startsWith('*')
       ? groups.includes(meta.groupId)
@@ -135,7 +134,6 @@ export default async function (parsedOptions: TeachOptions) {
         ? groups.length - 1 ? `本群等 ${groups.length} 个群` : '本群'
         : groups.length ? `${groups.length} 个群` : '全局禁止'}`)
     if (dialogue.probability < 1) output.push(`触发概率：${dialogue.probability}`)
-    if (dialogue.successors) output.push(`后继问题：${dialogue.successors}`)
     if (dialogue.flag & DialogueFlag.frozen) output.push('此问题已锁定')
     await meta.$send(output.join('\n'))
   }

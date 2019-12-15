@@ -6,17 +6,23 @@ declare module 'koishi-core/dist/database' {
   interface UserData {
     interactiveness: Activity
   }
+
+  interface Tables {
+    dialogue: DialogueTable
+  }
+
+  interface TableData {
+    dialogue: Dialogue
+  }
 }
 
-declare module 'koishi-core/dist/database' {
-  interface Database {
-    createDialogue (options: Dialogue): Promise<Dialogue>
-    getDialogueTest (test: DialogueTest): string
-    getDialogues (test: number[] | DialogueTest): Promise<Dialogue[]>
-    setDialogue (id: number, data: Partial<Dialogue>): Promise<any>
-    removeDialogues (ids: number[]): Promise<any>
-    getDialogueCount (test: DialogueTest): Promise<DialogueCount>
-  }
+interface DialogueTable {
+  createDialogue (options: Dialogue): Promise<Dialogue>
+  getDialogueTest (test: DialogueTest): string
+  getDialogues (test: number[] | DialogueTest): Promise<Dialogue[]>
+  setDialogue (id: number, data: Partial<Dialogue>): Promise<any>
+  removeDialogues (ids: number[]): Promise<any>
+  getDialogueCount (test: DialogueTest): Promise<DialogueCount>
 }
 
 extendUser(() => ({ interactiveness: {} }))
@@ -32,7 +38,6 @@ export interface Dialogue {
   answer: string
   writer: number
   groups: string
-  successors: string
   flag: number
   probability: number
 }
@@ -54,7 +59,7 @@ export interface DialogueTest {
   frozen?: boolean
 }
 
-injectMethods('mysql', {
+injectMethods('mysql', 'dialogue', {
   createDialogue (options) {
     return this.create('dialogues', options)
   },
